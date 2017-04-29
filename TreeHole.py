@@ -1,4 +1,6 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, \
+    redirect, url_for,\
+    render_template, jsonify
 
 
 from config import *
@@ -26,6 +28,10 @@ def addRecord():
 def index():
     return render_template('index.html')
 
+
+@app.errorhandler(405)
+def page_not_found(e):
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(host=HOST, port=PORT, debug=DEBUG)
