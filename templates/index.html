@@ -27,9 +27,16 @@
 </form>
 <table id="records">
 </table>
-<script src="/static/js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/static/js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/static/js/socket.io.js" charset="utf-8"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+    var socket = io.connect('http://' +
+        document.domain + ':' + location.port);
+    socket.on('recordUpdate', function(data) {
+        record = toRecord(data);
+        $('table#records').prepend(record);
+    });
     function getRecords(since, number, callback) {
         $.ajax({
             url: 'query',
@@ -47,15 +54,19 @@ $(document).ready(function() {
         });
     }
     function toRecord(data) {
+        date = new Date(data.timestamp);
         record = '<tr><tr><td>Nickname:</td><td>';
         record += data.nickname;
+        record += '</td></tr><tr><td>';
+        record += 'Time:</td><td>';
+        record += date.toLocaleString();
         record += '</td></tr><tr><td>';
         if (data.remark) {
             record += 'Remark:</td><td>';
             record += data.remark;
-            record += '</td></tr>';
+            record += '</td></tr><tr><td>';
         }
-        record += '<tr><td>Content:</td><td>';
+        record += 'Content:</td><td>';
         record += data.content;
         record += '</td></tr></tr>';
         return record;
@@ -76,12 +87,7 @@ $(document).ready(function() {
                 nickname: $('input#nickname').val(),
                 content: $('input#content').val(),
                 remark: $('input#remark').val()
-            }, function(data, status) {
-            if (!data.error) {
-                record = toRecord(data);
-                $('table#records').prepend(record);
-            }
-        });
+            }, function(data, status) {});
     });
 });
 </script>
