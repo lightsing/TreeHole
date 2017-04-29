@@ -5,7 +5,85 @@
     <title>Title</title>
 </head>
 <body>
-
+<form id="newRecord">
+    <table>
+        <tr>
+            <td>Nickname:</td>
+            <td><input type="text" id="nickname"/></td>
+        </tr>
+        <tr>
+            <td>Remark:</td>
+            <td><input type="text" id="remark"/></td>
+        </tr>
+        <tr>
+            <td>Content:</td>
+            <td><input type="text" id="content"/></td>
+        </tr>
+        <tr>
+            <td><button type="submit">Submit</button></td>
+        </tr>
+    </table>
+    <br/>
+</form>
+<table id="records">
+</table>
 <script src="/static/js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    function getRecords(since, number, callback) {
+        $.ajax({
+            url: 'query',
+            type: "get",
+            data: {
+                since: since,
+                number: number
+            },
+            success: function(response) {
+                callback(null, response);
+            },
+            error: function(err) {
+                callback(err, null);
+            }
+        });
+    }
+    function toRecord(data) {
+        record = '<tr><tr><td>Nickname:</td><td>';
+        record += data.nickname;
+        record += '</td></tr><tr><td>';
+        if (data.remark) {
+            record += 'Remark:</td><td>';
+            record += data.remark;
+            record += '</td></tr>';
+        }
+        record += '<tr><td>Content:</td><td>';
+        record += data.content;
+        record += '</td></tr></tr>';
+        return record;
+    }
+
+    getRecords(null, 5, function (err, response) {
+        if(!err) {
+            response.forEach(function (element) {
+                record = toRecord(element);
+                $('table#records').prepend(record);
+            });
+        }
+    });
+
+    $("form#newRecord").submit(function(e) {
+        e.preventDefault();
+        $.post("add", {
+                nickname: $('input#nickname').val(),
+                content: $('input#content').val(),
+                remark: $('input#remark').val()
+            }, function(data, status) {
+            if (!data.error) {
+                record = toRecord(data);
+                $('table#records').prepend(record);
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

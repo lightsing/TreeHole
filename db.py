@@ -74,8 +74,7 @@ class Records:
             cur.execute("INSERT INTO Records (timestamp, nickname, content, remark) VALUES (?, ?, ?, ?)", record)
             cur.execute("commit")
             return Records.toDict(record)
-        except sqlite3.Error:
-            print("failed!")
+        except sqlite3.Error as e:
             cur.execute("rollback")
             return {
                 'error': 'Add Record Fail'
