@@ -72,10 +72,10 @@ class Records:
         record = (int(time()*1000), ) + record
         try:
             cur.execute("INSERT INTO Records (timestamp, nickname, content, remark) VALUES (?, ?, ?, ?)", record)
-            cur.execute("commit")
+            conn.commit()
             return Records.toDict(record)
         except sqlite3.Error as e:
-            cur.execute("rollback")
+            conn.rollback()
             return {
                 'error': 'Add Record Fail'
             }
