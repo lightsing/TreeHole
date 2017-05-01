@@ -51,7 +51,10 @@ $(document).ready(function() {
                     content: $('#content').val(),
                     remark: $('#remark').val()
                 }, function(data, status) {
-                $("#dialog").modal('hide');
+                    $('#nickname').val("");
+                    $('#content').val("");
+                    $('#remark').val("");
+                    $("#dialog").modal('hide');
             });
         });
     });
