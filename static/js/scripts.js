@@ -36,10 +36,16 @@ $(document).ready(function() {
 
     getRecords(null, 5, function (err, response) {
         if(!err) {
+            var len = response.length;
+            for (var i = 0; i < len; i++) {
+                record = toRecord(response[i]);
+                $('#records').append(record);
+            }
+            /*
             response.forEach(function (element) {
                 record = toRecord(element);
                 $('#records').prepend(record);
-            });
+            });*/
         }
     });
 
