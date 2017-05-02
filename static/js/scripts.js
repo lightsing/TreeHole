@@ -1,15 +1,16 @@
 $(document).ready(function() {
     var socket = io.connect(window.location.href);
+    var last = null;
     socket.on('recordUpdate', function(data) {
         record = toRecord(data);
         $('#records').prepend(record);
     });
-    function getRecords(since, number, callback) {
+    function getRecords(number, callback) {
         $.ajax({
             url: 'query',
             type: "get",
             data: {
-                since: since,
+                since: last,
                 number: number
             },
             success: function(response) {
@@ -34,22 +35,6 @@ $(document).ready(function() {
         return record;
     }
 
-    getRecords(null, 5, function (err, response) {
-        if(!err) {
-            var len = response.length;
-            for (var i = 0; i < len; i++) {
-                record = toRecord(response[i]);
-                $('#records').append(record);
-            }
-            $('.loader-wrapper').fadeOut()
-            /*
-            response.forEach(function (element) {
-                record = toRecord(element);
-                $('#records').prepend(record);
-            });*/
-        }
-    });
-
     $("#dialog").on('shown.bs.modal', function (e) {
         $("#submit").click(function(e) {
             e.preventDefault();
@@ -64,5 +49,25 @@ $(document).ready(function() {
                     $("#dialog").modal('hide');
             });
         });
+    });
+
+    $('.footer').waypoint(function() {
+        console.log('yes');
+        $('.loader-wrapper').fadeIn();
+        getRecords(5, function (err, response) {
+            if(!err) {
+                var len = response.length;
+                if (len > 0) {
+                    last = response[0].timestamp;
+                    for (var i = 0; i < len; i++) {
+                        record = toRecord(response[i]);
+                        $('#records').append(record);
+                    }
+                    $('.loader-wrapper').fadeOut();
+                }
+            }
+        });
+    }, {
+        offset: 'bottom-in-view'
     });
 });
