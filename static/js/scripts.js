@@ -41,6 +41,7 @@ $(document).ready(function() {
                 record = toRecord(response[i]);
                 $('#records').append(record);
             }
+            $('.loader-wrapper').fadeOut()
             /*
             response.forEach(function (element) {
                 record = toRecord(element);
