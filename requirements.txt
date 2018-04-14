@@ -1,1 +1,2 @@
-flask-socketio=2.86
+flask
+flask-socketio

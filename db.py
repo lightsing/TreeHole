@@ -1,7 +1,6 @@
 import os
 import sqlite3
 from time import time
-from datetime import datetime
 
 import log
 from config import *
@@ -44,47 +43,47 @@ class Records:
     def __init__(self, number, start=None):
         cur = conn.cursor()
         if start:
-            cur.execute("SELECT * FROM Records WHERE timestamp < ? ORDER BY timestamp DESC LIMIT ?",
+            cur.execute('SELECT * FROM Records WHERE timestamp < ? ORDER BY timestamp DESC LIMIT ?',
                         (start, number))
         else:
-            cur.execute("SELECT * FROM Records ORDER BY timestamp DESC LIMIT ?",
+            cur.execute('SELECT * FROM Records ORDER BY timestamp DESC LIMIT ?',
                         (number, ))
         self.__records = cur.fetchall()
-        self.__recordsDict = list(map(Records.toDict, self.__records))
+        self.__records_dict = list(map(Records.to_dict, self.__records))
         self.__length = len(self.__records)
 
     def __len__(self):
         return self.__length
 
     @staticmethod
-    def toDict(record):
-        recordDict = {
+    def to_dict(record):
+        record_dict = {
             'timestamp': record[0],
             'nickname': record[1],
             'content': record[2],
             'remark': record[3]
         }
-        return recordDict
+        return record_dict
 
     @staticmethod
-    def addRecord(record):
+    def add_record(record):
         cur = conn.cursor()
         record = (int(time()*1000), ) + record
         try:
-            cur.execute("INSERT INTO Records (timestamp, nickname, content, remark) VALUES (?, ?, ?, ?)", record)
+            cur.execute('INSERT INTO Records (timestamp, nickname, content, remark) VALUES (?, ?, ?, ?)', record)
             conn.commit()
-            return Records.toDict(record)
-        except sqlite3.Error as e:
+            return Records.to_dict(record)
+        except sqlite3.Error:
             conn.rollback()
             return {
                 'error': 'Add Record Fail'
             }
 
-    def __convertRecords2Dict(self):
-        self.__recordsDict = map(Records.toDict, self.__records)
+    def __convert_records2dict(self):
+        self.__records_dict = map(Records.to_dict, self.__records)
 
-    def getRecords(self):
+    def get_records(self):
         return self.__records
 
-    def getRecordsDict(self):
-        return self.__recordsDict
+    def get_records_dict(self):
+        return self.__records_dict
