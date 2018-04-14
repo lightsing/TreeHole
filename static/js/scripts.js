@@ -30,7 +30,7 @@ $(document).ready(function() {
     <small>${date.toLocaleString()} ${data.remark}</small>
   </div>
   <div class="tile-body">
-    ${data.content}
+    <p>${data.content.replace(/\n+/g, '<br/>')}</p>
   </div>
 </div>`;
     return record;
