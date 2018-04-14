@@ -3,14 +3,17 @@ from flask import Flask, request, \
     render_template, jsonify
 from flask_socketio import SocketIO, emit
 from flask_yarn import Yarn
+from flask_cas import CAS
 
 from db import *
 
 app = Flask(__name__)
-Yarn(app)
 app.config['SECRET_KEY'] = APP_SECRET_KEY
+app.config['CAS_SERVER'] = CAS_SERVER
+app.config['CAS_AFTER_LOGIN'] = CAS_AFTER_LOGIN
 socketIO = SocketIO(app)
-
+Yarn(app)
+cas = CAS(app)
 
 @socketIO.on('connect')
 def test_connect():
@@ -42,7 +45,10 @@ def add_record():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if cas.username is None:
+        return render_template('index.html', action='login')
+    else:
+        return render_template('index.html', action='logout')
 
 
 @app.errorhandler(405)
@@ -51,4 +57,4 @@ def page_not_found(_):
 
 
 if __name__ == '__main__':
-    socketIO.run(app, host=HOST, port=PORT)
+    socketIO.run(app, host=HOST, port=PORT, debug=DEBUG)

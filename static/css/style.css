@@ -66,6 +66,19 @@ body {
   transform: translateY(0px);
 }
 
+.nav .active > * {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.page-header h3 {
+  padding: 10px;
+}
+
+#content {
+  resize: none;
+}
+
 .info-tile .tile-heading {
   text-align: left;
   color: #9e9e9e;
