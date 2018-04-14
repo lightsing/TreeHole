@@ -1,0 +1,29 @@
+{
+  "name": "treehole",
+  "version": "1.0.0",
+  "description": "Lightweight TreeHole with Flask, Sqlite and WebSocket",
+  "main": "TreeHole.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lightsing/TreeHole.git"
+  },
+  "author": "lightsing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lightsing/TreeHole/issues"
+  },
+  "homepage": "https://github.com/lightsing/TreeHole#readme",
+  "dependencies": {
+    "bootstrap": "^4.1.0",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.3.1",
+    "socket.io": "^2.1.0",
+    "waypoints": "^4.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}

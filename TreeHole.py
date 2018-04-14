@@ -2,10 +2,12 @@ from flask import Flask, request, \
     redirect, url_for, \
     render_template, jsonify
 from flask_socketio import SocketIO, emit
+from flask_yarn import Yarn
 
 from db import *
 
 app = Flask(__name__)
+Yarn(app)
 app.config['SECRET_KEY'] = APP_SECRET_KEY
 socketIO = SocketIO(app)
 
